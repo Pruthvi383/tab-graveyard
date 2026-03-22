@@ -1,0 +1,353 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tab Graveyard</title>
+    <style>
+      :root {
+        --background: 240 10% 3.9%;
+        --foreground: 0 0% 98%;
+        --card: 240 3.7% 15.9%;
+        --muted: 240 3.7% 15.9%;
+        --muted-foreground: 240 5% 64.9%;
+        --border: 240 3.7% 15.9%;
+        --input: 240 3.7% 15.9%;
+        --primary: 173 58% 39%;
+        --primary-foreground: 0 0% 98%;
+        --accent: 240 3.7% 15.9%;
+        --destructive: 0 72.2% 50.6%;
+        --radius: 16px;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        width: 320px;
+        min-height: 500px;
+        margin: 0;
+        padding: 14px;
+        font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+        background:
+          radial-gradient(circle at top, hsl(var(--primary) / 0.22), transparent 30%),
+          hsl(var(--background));
+        color: hsl(var(--foreground));
+      }
+
+      button,
+      input {
+        font: inherit;
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      .stack {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .panel,
+      .header,
+      .group-card,
+      .session-card,
+      .saved-card {
+        border: 1px solid hsl(var(--border));
+        border-radius: var(--radius);
+        background: hsl(var(--card) / 0.88);
+        backdrop-filter: blur(12px);
+      }
+
+      .header,
+      .panel,
+      .saved-card,
+      .group-card,
+      .session-card {
+        padding: 12px;
+      }
+
+      .title-row,
+      .row,
+      .group-actions {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+      }
+
+      .row.start {
+        align-items: flex-start;
+      }
+
+      .brand {
+        font-size: 18px;
+        font-weight: 700;
+      }
+
+      .helper,
+      .subtle,
+      .tab-url {
+        margin: 0;
+        font-size: 11px;
+        line-height: 1.45;
+        color: hsl(var(--muted-foreground));
+      }
+
+      .helper + .helper,
+      .helper + .subtle {
+        margin-top: 4px;
+      }
+
+      .badge,
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 999px;
+        border: 1px solid hsl(var(--border));
+        padding: 4px 9px;
+        font-size: 11px;
+      }
+
+      .pill.connected {
+        background: hsl(var(--foreground));
+        color: hsl(var(--background));
+      }
+
+      .pill.idle {
+        color: hsl(var(--muted-foreground));
+      }
+
+      .primary-button,
+      .secondary-button,
+      .ghost-button,
+      .archive-button,
+      .toggle-button,
+      .search-input {
+        border-radius: 12px;
+      }
+
+      .primary-button,
+      .secondary-button,
+      .ghost-button,
+      .archive-button,
+      .toggle-button {
+        border: 1px solid hsl(var(--border));
+        cursor: pointer;
+        transition: transform 120ms ease, opacity 120ms ease, background 120ms ease;
+      }
+
+      .primary-button:hover,
+      .secondary-button:hover,
+      .ghost-button:hover,
+      .archive-button:hover,
+      .toggle-button:hover {
+        transform: translateY(-1px);
+      }
+
+      .primary-button {
+        width: 100%;
+        border-color: transparent;
+        background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--foreground)));
+        color: hsl(var(--background));
+        font-weight: 700;
+        padding: 12px 14px;
+      }
+
+      .secondary-button {
+        width: 100%;
+        background: hsl(var(--muted));
+        color: hsl(var(--foreground));
+        font-weight: 600;
+        padding: 10px 12px;
+      }
+
+      .ghost-button,
+      .toggle-button,
+      .archive-button {
+        background: hsl(var(--muted));
+        color: hsl(var(--foreground));
+        padding: 8px 10px;
+      }
+
+      .toggle-button {
+        min-width: 42px;
+      }
+
+      .archive-button {
+        font-weight: 600;
+      }
+
+      .search-input {
+        width: 100%;
+        border: 1px solid hsl(var(--border));
+        background: hsl(var(--muted));
+        color: hsl(var(--foreground));
+        padding: 10px 12px;
+        outline: none;
+      }
+
+      .search-input::placeholder {
+        color: hsl(var(--muted-foreground));
+      }
+
+      .section-title {
+        margin: 0;
+        font-size: 12px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: hsl(var(--muted-foreground));
+      }
+
+      .divider {
+        height: 1px;
+        background: hsl(var(--border));
+        margin: 10px 0;
+      }
+
+      .scroll {
+        max-height: 148px;
+        overflow-y: auto;
+        padding-right: 4px;
+      }
+
+      .group-card + .group-card,
+      .session-card + .session-card {
+        margin-top: 8px;
+      }
+
+      .session-topic,
+      .tab-title {
+        margin: 0;
+        font-size: 13px;
+        font-weight: 600;
+        line-height: 1.35;
+      }
+
+      .group-tabs {
+        display: none;
+        margin-top: 10px;
+        padding-top: 10px;
+        border-top: 1px solid hsl(var(--border));
+      }
+
+      .group-tabs.open {
+        display: block;
+      }
+
+      .tab-item {
+        padding: 8px 0;
+        border-bottom: 1px solid hsl(var(--border) / 0.6);
+      }
+
+      .tab-item:last-child {
+        border-bottom: 0;
+        padding-bottom: 0;
+      }
+
+      .button-row {
+        display: flex;
+        gap: 8px;
+      }
+
+      .button-row > * {
+        flex: 1;
+      }
+
+      .footer-link {
+        display: inline-flex;
+        justify-content: center;
+        padding: 10px 12px;
+        color: hsl(var(--muted-foreground));
+      }
+
+      .hidden {
+        display: none;
+      }
+
+      .error {
+        color: hsl(var(--destructive));
+        font-size: 12px;
+        line-height: 1.4;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="stack">
+      <section class="header">
+        <div class="title-row">
+          <div>
+            <div class="brand">Tab Graveyard</div>
+            <p class="helper">Save browser context instead of hoarding tabs.</p>
+          </div>
+          <span id="tab-count" class="badge">0 tabs</span>
+        </div>
+        <div class="row" style="margin-top: 12px">
+          <p id="connection-copy" class="helper">Connect your dashboard to start archiving.</p>
+          <span id="connection-pill" class="pill idle">Setup</span>
+        </div>
+      </section>
+
+      <button id="group-button" class="primary-button">Group Current Tabs</button>
+      <p id="status" class="helper"></p>
+      <p id="error" class="error hidden"></p>
+
+      <section class="panel">
+        <p class="section-title">Connect Extension</p>
+        <input id="dashboard-url-input" class="search-input" placeholder="Dashboard URL" style="margin-top: 10px" />
+        <input id="token-input" class="search-input" placeholder="Personal access token" style="margin-top: 8px" />
+        <button id="save-connection-button" class="secondary-button" style="margin-top: 10px">Save Connection</button>
+      </section>
+
+      <section id="saved-state-panel" class="saved-card hidden">
+        <div class="row start">
+          <div>
+            <p class="section-title">Last Saved Session</p>
+            <p id="saved-state-title" class="session-topic" style="margin-top: 6px">Nothing saved yet</p>
+            <p id="saved-state-copy" class="helper" style="margin-top: 4px">Archive a group and it will stay visible here.</p>
+          </div>
+          <span class="pill connected">Saved</span>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="row">
+          <p class="section-title">Grouped Results</p>
+          <button id="archive-all-button" class="ghost-button hidden">Archive All</button>
+        </div>
+        <p class="helper" style="margin-top: 6px">After grouping, save the sets you want to keep.</p>
+        <div id="group-results" class="scroll" style="margin-top: 10px">
+          <p class="subtle">Your grouped tab sets will appear here.</p>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="row">
+          <p class="section-title">Recent Sessions</p>
+        </div>
+        <div id="recent-sessions" class="scroll" style="margin-top: 10px">
+          <p class="subtle">Saved sessions will show up here for quick restore.</p>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="row">
+          <p class="section-title">Search & Restore</p>
+          <button id="clear-search-button" class="ghost-button hidden">Clear</button>
+        </div>
+        <p class="helper" style="margin-top: 6px">Try “Redis session from Tuesday” or “that browser memory rabbit hole”.</p>
+        <input id="search-input" class="search-input" placeholder="Search saved sessions..." style="margin-top: 10px" />
+        <div id="search-results" class="scroll" style="margin-top: 10px"></div>
+      </section>
+
+      <a id="open-dashboard" href="#" class="footer-link">Open Dashboard</a>
+    </div>
+
+    <script src="popup.js"></script>
+  </body>
+</html>

@@ -1,0 +1,14 @@
+.DS_Store
+.tools
+node_modules
+dashboard/node_modules
+dashboard/.next
+dashboard/out
+dashboard/.env
+dashboard/.env.local
+dashboard/.env.development.local
+dashboard/.env.production.local
+dashboard/.env.test.local
+extension/*.pem
+coverage
+dist
