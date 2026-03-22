@@ -24,7 +24,7 @@ Tab Graveyard is an AI-powered browser tab manager made of two parts:
 2. Enable Email auth.
 3. Add your local and production URLs to the redirect allow list:
    - `http://localhost:3001/auth/confirm`
-   - `https://your-vercel-domain/auth/confirm`
+   - `https://tab-graveyard0.vercel.app/auth/confirm`
 
 ## 3. Create Upstash Redis
 
@@ -75,8 +75,8 @@ The scaffold includes placeholder icons, but you should replace those files with
 - Users sign in on the dashboard with Supabase Auth.
 - The dashboard lets each user generate personal extension tokens.
 - The extension stores its dashboard URL and personal token in `chrome.storage.local`.
-- The extension defaults to `http://localhost:3000` as the dashboard API base.
-- For production, update the Vercel URL in [`extension/background.js`](/Users/pruthvipatil/Tab%20Graveyard/extension/background.js) and [`extension/manifest.json`](/Users/pruthvipatil/Tab%20Graveyard/extension/manifest.json).
+- The extension defaults to `https://tab-graveyard0.vercel.app` as the dashboard API base.
+- Local fallbacks for `http://localhost:3000` and `http://localhost:3001` still work during development.
 
 ## 10. Deploy To Vercel
 

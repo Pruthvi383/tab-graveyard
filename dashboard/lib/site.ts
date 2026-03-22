@@ -1,4 +1,4 @@
-const FALLBACK_SITE_URL = "http://localhost:3001";
+const FALLBACK_SITE_URL = "https://tab-graveyard0.vercel.app";
 
 export function getSiteUrl() {
   const envUrl =
@@ -16,4 +16,3 @@ export function getSiteUrl() {
 
   return `https://${envUrl}`;
 }
-

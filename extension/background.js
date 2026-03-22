@@ -1,4 +1,4 @@
-const DEFAULT_DASHBOARD_URL = "http://localhost:3000";
+const DEFAULT_DASHBOARD_URL = "https://tab-graveyard0.vercel.app";
 const LOCAL_DASHBOARD_FALLBACKS = ["http://localhost:3000", "http://localhost:3001"];
 const IDLE_MINUTES = 120;
 const RECENT_SESSIONS_LIMIT = 5;

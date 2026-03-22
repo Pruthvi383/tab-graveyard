@@ -7,7 +7,7 @@
   "host_permissions": [
     "http://localhost:3000/*",
     "http://localhost:3001/*",
-    "https://tab-graveyard.vercel.app/*"
+    "https://tab-graveyard0.vercel.app/*"
   ],
   "background": {
     "service_worker": "background.js"
